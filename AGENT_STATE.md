@@ -142,7 +142,7 @@ Keep only material items needed for future correctness.
 
 ## Open blockers
 
-- The two implementation gaps are addressed; final evidence/commit and one targeted reviewer verification remain. Keep CC-01 and CC-03 `IN_PROGRESS`. No agent delegation is allowed.
+- The two implementation gaps are addressed; one targeted reviewer verification remains. Keep CC-01 and CC-03 `IN_PROGRESS`. No agent delegation is allowed.
 
 ## Scope-change references
 
