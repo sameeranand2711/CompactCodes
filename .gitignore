@@ -1,0 +1,27 @@
+agent_logs/
+
+# .NET build and test output
+**/bin/
+**/obj/
+TestResults/
+artifacts/
+*.nupkg
+*.snupkg
+
+# IDE and local user files
+.vs/
+*.user
+*.suo
+
+# Temporary and local logs
+*.tmp
+*.log
+
+# Local environment secrets
+.env
+.env.*
+!.env.example
+
+# Operating system metadata
+Thumbs.db
+.DS_Store
