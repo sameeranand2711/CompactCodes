@@ -8,6 +8,8 @@ Tasks are sequential. `NOT_STARTED → IN_PROGRESS → COMPLETE`; `BLOCKED` is a
 
 **Six Thinking Hats review (2026-10-05):** Completed on the review branch. The architecture and V1 API remain accepted; Blue-hat release decision is `NO-GO` until the two existing evidence gaps are remediated and targeted verification passes. No additional blocking finding was introduced.
 
+**Remediation status (2026-10-05):** Implemented and validated on `remediation/cc-01-cc-03-evidence`: added the local benchmark campaign/report and a broad birthday-bound collision observation test. Both original review findings remain pending targeted independent verification. CC-01 and CC-03 remain `IN_PROGRESS`.
+
 ## Shared task boundaries
 - **Default external side effects:** `NONE` for every task.
 - **Production authority:** `NONE` for every task.

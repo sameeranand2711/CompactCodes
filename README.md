@@ -127,6 +127,16 @@ dotnet test CompactCodes.sln --configuration Release
 
 This builds and tests both target frameworks. The sample can be run using the command in [Sample app](#sample-app).
 
+The statistical test campaign reports duplicate observations from 100,000 generated 10-character values over a 16-character alphabet. It allows up to five observed duplicate values; from the expected 0.004547 colliding pairs, Markov's inequality bounds the probability of exceeding that limit to less than 0.1%. A nonzero collision count is not itself a failure.
+
+Run the local benchmark campaign from the repository root:
+
+```powershell
+dotnet run --project tests\CompactCodes.Benchmarks\CompactCodes.Benchmarks.csproj --configuration Release
+```
+
+It measures serial codes/second and managed allocations/code, plus parallel codes/second, for lengths 8, 10, 12, 16, and 32 using Base62 and a smaller valid Base32 alphabet. The recorded local results and limitations are in [the benchmark report](tests/CompactCodes.Benchmarks/BENCHMARK_REPORT.md). These measurements are machine-specific observations, not a cryptographic certification.
+
 ## Versioning/license
 
 The local package currently packs as `CompactCodes` version `1.0.0`; a release/versioning policy has not been established. No license metadata or license file is present in this repository, so no license is stated here.

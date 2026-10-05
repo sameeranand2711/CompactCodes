@@ -7,10 +7,10 @@
 
 - Project: CompactCodes
 - Repository: `CompactCodes` at `D:\freelance\sameer\i-gaming\CompactCodes`
-- Current branch: `review/cc-01-cc-03`
+- Current branch: `remediation/cc-01-cc-03-evidence` (created from `review/cc-01-cc-03` at `1e1af98`)
 - Base branch: `main`
-- Last completed commit/checkpoint: independent review result on `review/cc-01-cc-03`; CC-01 and CC-03 remain review-pending.
-- Working tree status: review findings are recorded for a local branch checkpoint; build/package output is ignored.
+- Last completed commit/checkpoint: bounded remediation on `remediation/cc-01-cc-03-evidence`; CC-01 and CC-03 remain review-pending.
+- Working tree status: remediation validation completed; build/package output is ignored.
 
 ## Current phase/task
 
@@ -18,7 +18,7 @@
 - Active task: CC-03
 - Task status: IN_PROGRESS
 - Risk: HIGH
-- Exact resume point: The independent review completed with `RESULT: FAIL`; the implementation owner has one bounded remediation pass for the two release-evidence findings below.
+- Exact resume point: Both findings from the independent `RESULT: FAIL` have been addressed and validated; local commit is recorded on this branch, and targeted independent verification remains pending.
 
 ## Active authority boundary
 
@@ -47,6 +47,7 @@
 - Targeted regression:
 - Broader regression:
 - Independent review (if required): `RESULT: FAIL`. No Critical/High security defect found. Medium release blocker: no benchmark project/report exists although `SPEC.md` section 20 requires a benchmark report. Low test-evidence gap: the required test campaign calls for collision observation/reporting, but the tests only validate invariants and frequency distributions. Do not represent CC-01 or CC-03 as passed until the bounded remediation and targeted verification complete.
+- Remediation validation: full solution Release build with warnings as errors succeeded (0 warnings/errors); full tests passed 25/25 on net8.0 and net10.0; sample ran; benchmark campaign ran for Base62/Base32, lengths 8/10/12/16/32, 200,000 serial and parallel codes per configuration; package contents inspected.
 - Other checks: `problems` reported no errors; `git diff --check` passed; source search confirmed CSPRNG selector use and no `System.Random`/modulo mapping. Concurrency test generated 1,000,000 codes per target; statistical sanity covered aggregate and all 10 positions over 20,000 codes per target. Sample visibly generated default and custom codes and explained DB UNIQUE/retry responsibility. Local package inspection confirmed ID/version, both target assemblies, declared DI abstractions dependency, and embedded `README.md`.
 
 ## Independent review report
@@ -60,6 +61,19 @@
 - UNKNOWN/BLOCKED prerequisites: none beyond the two recorded remediation items.
 - Next action: implementation owner performs the single allowed remediation pass; reviewer then verifies only these findings.
 
+## Bounded remediation evidence
+
+- Branch: `remediation/cc-01-cc-03-evidence`, created from review commit `1e1af98`.
+- Benchmark project: `tests/CompactCodes.Benchmarks`; report: `tests/CompactCodes.Benchmarks/BENCHMARK_REPORT.md`.
+- Exact benchmark command: `dotnet run --project tests\CompactCodes.Benchmarks\CompactCodes.Benchmarks.csproj --configuration Release`.
+- Campaign: .NET 8.0.29 on Windows 10.0.26200 x64, SDK 10.0.101, 4 logical processors; 5,000 warmups then 200,000 serial/parallel generations for each of 10 alphabet/length combinations.
+- Representative results: Base62 length 10 = 360,019 serial codes/s, 144.00 serial allocated bytes/code, 1,083,845 parallel codes/s; Base32 length 8 = 412,147 serial codes/s, 128.00 bytes/code, 914,165 parallel codes/s. Full results and limitations are in the report; they are not cryptographic certification.
+- Collision coverage: 100,000 samples per target framework, 16-character alphabet, length 10, expected colliding pairs 0.004547, allowed duplicate-value count <= 5. The test outputs the actual count; duplicate count >5 implies at least 6 colliding pairs, with Markov probability bound 0.004547/6 < 0.1%. A zero-collision assertion is not used.
+- Validation: `dotnet build CompactCodes.sln --configuration Release --no-restore -warnaserror` passed with 0 warnings/errors; `dotnet test CompactCodes.sln --configuration Release --no-restore` passed 25/25 on each target; sample ran successfully; benchmark command completed all configurations; local package built and contains both target DLLs and `README.md`.
+- Collision observation command: `dotnet test tests\CompactCodes.Tests\CompactCodes.Tests.csproj --configuration Release --no-build --no-restore --filter "FullyQualifiedName~Generate_ReportsObservedDuplicatesWithinBroadBirthdayBound" --logger "console;verbosity=detailed"`. It observed 0 duplicate values on each target (net8.0 and net10.0), from 100,000 samples per target; the test permits up to 5. Expected colliding pairs are 0.004547; Markov bound for exceeding 5 is <0.1%. Collisions are not required to be zero.
+- Package inspection: `dotnet pack src\CompactCodes\CompactCodes.csproj --configuration Release --no-restore --output artifacts\packages` succeeded; archive contains `lib/net8.0/CompactCodes.dll`, `lib/net10.0/CompactCodes.dll`, and `README.md`.
+- Final diff check passed. Next approved action: request targeted independent verification. No merge/push/publish/release.
+
 ## Six Thinking Hats review
 
 ### White — facts and evidence
@@ -67,7 +81,7 @@
 - The library targets .NET 8 and .NET 10 and exposes a synchronous `ICompactCodeGenerator.Generate()` API.
 - The default uses Base62 at length 10; validation enforces lengths 8–64, unique RFC 3986 unreserved ASCII characters, and at least 40 bits of nominal code space.
 - `RandomNumberGenerator.GetInt32` performs every symbol selection; generator instances retain only immutable alphabet/length state.
-- Release build, 24 tests per target framework, sample execution, and local package inspection pass. The benchmark report and collision observation/report required by `SPEC.md` are absent.
+- At the time of the independent review, release build, 24 tests per target framework, sample execution, and local package inspection passed, but the required benchmark report and collision observation/report were absent. Current remediation evidence is recorded below.
 
 ### Red — user/developer reaction
 
@@ -99,7 +113,7 @@
 
 - Architecture decision: retain the current pure-generator design and public API; no redesign is justified.
 - Security decision: no Critical/High defect was identified in RNG, bias avoidance, validation, concurrency, DI, or documentation claims.
-- Release decision: `NO-GO` until the two recorded evidence gaps receive the single allowed remediation pass and targeted verification. After those pass, the reviewed scope is suitable for human release approval.
+- Release decision at review time: `NO-GO` until the two recorded evidence gaps receive the single allowed remediation pass and targeted verification. The implementation gaps are now addressed; the targeted verification gate remains pending.
 
 ## Material evidence and assumptions
 
@@ -128,9 +142,7 @@ Keep only material items needed for future correctness.
 
 ## Open blockers
 
-- `MEDIUM` release blocker: the required benchmark report is absent (`SPEC.md` sections 15 and 20); repository inventory contains no benchmark project or report.
-- `LOW` test-evidence gap: the required collision observation/report is absent (`SPEC.md` section 19); concurrency and statistical tests do not count or report collisions.
-- Keep CC-01 and CC-03 `IN_PROGRESS`; one implementation-owner remediation pass and one targeted reviewer verification remain. No agent delegation is allowed.
+- The two implementation gaps are addressed; final evidence/commit and one targeted reviewer verification remain. Keep CC-01 and CC-03 `IN_PROGRESS`. No agent delegation is allowed.
 
 ## Scope-change references
 
@@ -142,8 +154,8 @@ Keep only material items needed for future correctness.
 
 ## Next approved action
 
-- Return the two findings to the implementation owner for one bounded remediation pass, then perform one targeted verification of only those findings.
+- Hand off for targeted verification of only the two findings. Do not mark CC-01 or CC-03 complete before that gate passes.
 
 ## Last update
 
-- Timestamp/session identifier: 2026-10-05; independent and Six Thinking Hats reviews completed on `review/cc-01-cc-03`; Blue-hat decision is `NO-GO`, with no Critical/High security findings and two release-evidence findings remaining.
+- Timestamp/session identifier: 2026-10-05; bounded remediation committed on `remediation/cc-01-cc-03-evidence`; targeted verification pending.
