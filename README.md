@@ -139,4 +139,6 @@ It measures serial codes/second and managed allocations/code, plus parallel code
 
 ## Versioning/license
 
-The local package currently packs as `CompactCodes` version `1.0.0`; a release/versioning policy has not been established. No license metadata or license file is present in this repository, so no license is stated here.
+The local package currently packs as `CompactCodes` version `1.0.0`; a release/versioning policy has not been established.
+
+CompactCodes is licensed under the [MIT License](LICENSE). The NuGet package declares the `MIT` license expression and includes the license text.
