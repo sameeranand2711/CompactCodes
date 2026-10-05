@@ -4,11 +4,13 @@ Tasks are sequential. `NOT_STARTED → IN_PROGRESS → COMPLETE`; `BLOCKED` is a
 
 **Human-approved exception (2026-10-05):** Defer all independent reviews until CC-03/end-of-work review. CC-02 and subsequent implementation tasks may proceed while earlier review gates remain pending. Keep affected task statuses `IN_PROGRESS` until their required reviews pass.
 
-**Independent review result (2026-10-05):** `FAIL`. No Critical/High security defect was found in the randomness, validation, DI, or documentation paths, but release evidence is incomplete: the required benchmark report is absent, and the required collision observation/report is not implemented in the test campaign. See `AGENT_STATE.md` for commands and evidence. One bounded implementation-owner remediation pass remains.
+**Initial independent review result (2026-10-05, historical):** `FAIL`. No Critical/High security defect was found in the randomness, validation, DI, or documentation paths, but release evidence was incomplete: the required benchmark report was absent, and the required collision observation/report was not implemented in the test campaign. See `AGENT_STATE.md` for commands and evidence. One bounded implementation-owner remediation pass remained.
 
 **Six Thinking Hats review (2026-10-05):** Completed on the review branch. The architecture and V1 API remain accepted; Blue-hat release decision is `NO-GO` until the two existing evidence gaps are remediated and targeted verification passes. No additional blocking finding was introduced.
 
-**Remediation status (2026-10-05):** Implemented and validated on `remediation/cc-01-cc-03-evidence`: added the local benchmark campaign/report and a broad birthday-bound collision observation test. Both original review findings remain pending targeted independent verification. CC-01 and CC-03 remain `IN_PROGRESS`.
+**Targeted independent verification (2026-10-05):** `PASS` on `verification/cc-01-cc-03-remediation`, reviewing remediation commit `79df1835aa57f633bea376d2dd79d8cc5c6ee74f` against baseline `1e1af98`. Both original findings are resolved; no Critical/High issue was introduced. Exact commands and evidence are recorded in `AGENT_STATE.md`.
+
+**Remediation status (2026-10-05):** Implemented, validated, and independently verified. CC-01 and CC-03 are `COMPLETE`; no merge, push, publish, or release occurred.
 
 ## Shared task boundaries
 - **Default external side effects:** `NONE` for every task.
@@ -19,7 +21,7 @@ Tasks are sequential. `NOT_STARTED → IN_PROGRESS → COMPLETE`; `BLOCKED` is a
 
 ## CC-01 — Small secure code generator and configuration contract
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `COMPLETE`
 - **Owner:** `agent-01-builder-docs`
 - **Dependencies:** None
 - **Risk:** `HIGH`
@@ -47,7 +49,7 @@ Tasks are sequential. `NOT_STARTED → IN_PROGRESS → COMPLETE`; `BLOCKED` is a
 - [x] READ/WRITE/PROTECTED and command boundaries respected.
 - [x] No external/production side effects or unapproved dependencies.
 - [x] Tests/validations pass without weakening tests or disabling checks.
-- [ ] Correct risk-based independent review completed when required; no unaddressed blocker.
+- [x] Correct risk-based independent review completed when required; no unaddressed blocker.
 - [x] `AGENT_STATE.md` updated; scope changes recorded; local task checkpoint/commit when authorized.
 
 ## CC-02 — Minimal DI registration and console demo
@@ -85,7 +87,7 @@ Tasks are sequential. `NOT_STARTED → IN_PROGRESS → COMPLETE`; `BLOCKED` is a
 
 ## CC-03 — Final README, local packaging and independent security review
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `COMPLETE`
 - **Owner:** `agent-01-builder-docs + agent-02-independent-review`
 - **Dependencies:** CC-02
 - **Risk:** `HIGH`
@@ -113,5 +115,5 @@ Tasks are sequential. `NOT_STARTED → IN_PROGRESS → COMPLETE`; `BLOCKED` is a
 - [x] READ/WRITE/PROTECTED and command boundaries respected.
 - [x] No external/production side effects or unapproved dependencies.
 - [x] Tests/validations pass without weakening tests or disabling checks.
-- [ ] Correct risk-based independent review completed when required; no unaddressed blocker.
+- [x] Correct risk-based independent review completed when required; no unaddressed blocker.
 - [x] `AGENT_STATE.md` updated; scope changes recorded; local task checkpoint/commit when authorized.
